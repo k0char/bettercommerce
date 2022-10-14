@@ -1,10 +1,11 @@
+from xml.dom import xmlbuilder
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.template import loader
-from .models import User, Item
+from .models import User, Item, Categories
 
 
 def index(request):
@@ -76,3 +77,18 @@ def createrecord(request):
     item = Item(name=x, price=y, description=z)
     item.save()
     return HttpResponseRedirect(reverse("index"))
+def categories(request):
+    categories = Categories.objects.all().values()
+    template = loader.get_template("auctions/categories.html")
+    context = {
+        "categories": categories,
+    }
+    return HttpResponse(template.render(context, request))
+def addcategory(request):
+    template = loader.get_template("auctions/addcategory.html")
+    return HttpResponse(template.render({}, request))
+def addcategoryrecord(request):
+    x = request.POST["name"]
+    category = Categories(name=x)
+    category.save()
+    return HttpResponseRedirect(reverse("auctions/category.html"))

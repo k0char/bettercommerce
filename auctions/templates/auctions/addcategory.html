@@ -1,0 +1,9 @@
+<h1>Add a new category here</h1>
+
+<form action="addcategoryrecord/" method="post">
+{% csrf_token %}
+Category Name:<br>
+<input name="name">
+<br><br>
+<input type="submit" value="Submit">
+</form>

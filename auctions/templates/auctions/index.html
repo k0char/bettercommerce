@@ -3,10 +3,13 @@
 {% block body %}
     <h2>Active Listings</h2>
         {% for x in items %}
+            {{ x.image }}
+            {% load static %} <img src="{% static "auctions/media/{{ x.image }}" %}" alt="home" />
             {{ x.name }}
             {{ x.price }}
             {{ x.description }}
         {% endfor %}
 
     TODO
+    {% load static %} <img src="{% static "auctions/media/seba1.png" %}" alt="home" />
 {% endblock %}
