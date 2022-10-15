@@ -7,11 +7,5 @@ urlpatterns = [
     path("login", views.login_view, name="login"),
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
-    path("create/", views.create, name="create"),
-    path("create/createrecord/", views.createrecord, name="createrecord"),
-    path("categories/", views.categories, name='categories'),
-    path("addcategory/", views.addcategory, name='addcategory'),
-    path("addcategory/addcategoryrecord/", views.addcategory, name='addcategoryrecord')
+    path("create", views.createListing, name="create"),
 ]
-
-urlpatterns += staticfiles_urlpatterns()

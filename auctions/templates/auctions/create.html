@@ -1,19 +1,13 @@
+{% extends "auctions/layout.html" %}
 
+{% block body %}
 <h1>Create Listing HERE !!!</h1>
 
-<form action="createrecord/" method="post">
-{% csrf_token %}
-Image:<br>
-<input name="image">
-<br><br>
-Name:<br>
-<input name="name">
-<br><br>
-Price:<br>
-<input name="price">
-<br><br>
-Description:<br>
-<input name="description">
-<br><br>
-<input type="submit" value="Submit">
+<form action="{% url 'create' %}" metod="POST">
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input type="title" class="form-control" id="exampleInputEmail1"  placeholder="Enter Title">
+    </div>
 </form>
+
+{% endblock %}

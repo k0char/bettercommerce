@@ -5,18 +5,32 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.template import loader
-from .models import User, Item, Categories
+from .models import Listing
 
 
 def index(request):
+    return render(request, "auctions/index.html")
+"""def index(request):
     items = Item.objects.all().values()
     template = loader.get_template("auctions/index.html")
     context = {
         "items": items,
     }
-    return HttpResponse(template.render(context, request))
+    return HttpResponse(template.render(context, request))"""
 
-
+def createListing(request):
+    if request.method == "GET":
+        return render(request, "auctions/create.html")
+def CreateListingRecord(request):
+    a = request.POST["title"]
+    b = request.POST["description"]
+    c = request.POST["imageURL"]
+    d = request.POST["price"]
+    e = request.POST["isActive"]
+    f = request.POST["category"]
+    listing = Listing(title=a, description=b, imageURL=c, price=d, isActive=e, category=f)
+    listing.save()
+    return HttpResponseRedirect(reverse("/auctions"))
 def login_view(request):
     if request.method == "POST":
 
@@ -67,28 +81,3 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
-def create(request):
-    template = loader.get_template("auctions/create.html")
-    return HttpResponse(template.render({}, request))
-def createrecord(request):
-    x = request.POST["name"]
-    y = request.POST["price"]
-    z = request.POST["description"]
-    item = Item(name=x, price=y, description=z)
-    item.save()
-    return HttpResponseRedirect(reverse("index"))
-def categories(request):
-    categories = Categories.objects.all().values()
-    template = loader.get_template("auctions/categories.html")
-    context = {
-        "categories": categories,
-    }
-    return HttpResponse(template.render(context, request))
-def addcategory(request):
-    template = loader.get_template("auctions/addcategory.html")
-    return HttpResponse(template.render({}, request))
-def addcategoryrecord(request):
-    x = request.POST["name"]
-    category = Categories(name=x)
-    category.save()
-    return HttpResponseRedirect(reverse("auctions/category.html"))
