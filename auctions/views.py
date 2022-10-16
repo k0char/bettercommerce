@@ -5,32 +5,42 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.template import loader
-from .models import Listing
+from .models import Listing, Category, User
 
 
 def index(request):
-    return render(request, "auctions/index.html")
+    listing = Listing.objects.all().values()
+    template = loader.get_template("auctions/index.html")
+    context = {
+        "listing": listing,
+    }
+    return HttpResponse(template.render(context, request))
 """def index(request):
     items = Item.objects.all().values()
     template = loader.get_template("auctions/index.html")
     context = {
         "items": items,
     }
-    return HttpResponse(template.render(context, request))"""
-
+    return HttpResponse(template.render(context, request))
+"""
 def createListing(request):
     if request.method == "GET":
-        return render(request, "auctions/create.html")
-def CreateListingRecord(request):
-    a = request.POST["title"]
-    b = request.POST["description"]
-    c = request.POST["imageURL"]
-    d = request.POST["price"]
-    e = request.POST["isActive"]
-    f = request.POST["category"]
-    listing = Listing(title=a, description=b, imageURL=c, price=d, isActive=e, category=f)
-    listing.save()
-    return HttpResponseRedirect(reverse("/auctions"))
+        allCategories = Category.objects.all()
+        return render(request, "auctions/create.html", {
+            "categories":allCategories
+        })
+    else:
+        a = request.POST["title"]
+        b = request.POST["description"]
+        c = request.POST["imageURL"]
+        d = request.POST["price"]
+        e = request.POST["category"]
+        categoryData = Category.objects.get(categoryName=e)
+        #WHO IS USER
+        currentUser = request.user
+        listing = Listing(title=a, description=b, imageURL=c, price=d, category=categoryData)
+        listing.save()
+        return HttpResponseRedirect(reverse("index"))
 def login_view(request):
     if request.method == "POST":
 

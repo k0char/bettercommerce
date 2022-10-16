@@ -3,11 +3,33 @@
 {% block body %}
 <h1>Create Listing HERE !!!</h1>
 
-<form action="{% url 'create' %}" metod="POST">
+  <form action="{% url 'create' %}" metod="POST">
+    {% csrf_token %}
     <div class="form-group">
       <label for="title">Title</label>
-      <input type="title" class="form-control" id="exampleInputEmail1"  placeholder="Enter Title">
+      <input type="title" class="form-control" id="title"  placeholder="Enter Title">
     </div>
-</form>
+    <div class="form-group">
+      <label for="description">description</label>
+      <input type="description" class="form-control" id="description"  placeholder="Enter description">
+    </div>
+    <div class="form-group">
+      <label for="imageURL">imageURL</label>
+      <input type="imageURL" class="form-control" id="imageURL"  placeholder="Enter imageURL">
+    </div>
+    <div class="form-group">
+      <label for="price">price</label>
+      <input type="price" class="form-control" id="price"  placeholder="Enter price">
+    </div>
+    <div class="form-group">
+      <label for="category">Choose a category:</label>
+      <select name="category" id="category">
+        {% for i in categories %}
+          <option value="{{ i }}">{{ i }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="btn btn-success">Create New Listing!</button>
+  </form>
 
 {% endblock %}
