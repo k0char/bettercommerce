@@ -11,8 +11,10 @@ from .models import Listing, Category, User
 def index(request):
     listing = Listing.objects.all().values()
     template = loader.get_template("auctions/index.html")
+    allCategories = Category.objects.all()
     context = {
         "listing": listing,
+        "categories": allCategories,
     }
     return HttpResponse(template.render(context, request))
 """def index(request):
@@ -23,6 +25,12 @@ def index(request):
     }
     return HttpResponse(template.render(context, request))
 """
+def listing(request, id):
+    listingData = Listing.objects.get(pk=id)
+    return render(request, "auctions/listing.html", {
+        "listing": listingData
+    })
+
 def createListing(request):
     if request.method == "GET":
         allCategories = Category.objects.all()
@@ -30,17 +38,34 @@ def createListing(request):
             "categories":allCategories
         })
     else:
-        a = request.POST["title"]
-        b = request.POST["description"]
-        c = request.POST["imageURL"]
-        d = request.POST["price"]
-        e = request.POST["category"]
-        categoryData = Category.objects.get(categoryName=e)
+        title = request.POST["title"]
+        description = request.POST["description"]
+        imageURL = request.POST["imageURL"]
+        price = request.POST["price"]
+        category = request.POST["category"]
+        categoryData = Category.objects.get(categoryName=category)
         #WHO IS USER
         currentUser = request.user
-        listing = Listing(title=a, description=b, imageURL=c, price=d, category=categoryData)
-        listing.save()
+        newListing = Listing(
+            title=title,
+            description=description,
+            imageURL=imageURL,
+            price=price,
+            category=categoryData
+        )
+        newListing.save()
         return HttpResponseRedirect(reverse("index"))
+def displayCategory(request):
+    if request.method == "POST":
+        categoryFromForm = request.POST['category']
+        category = Category.objects.get(categoryName=categoryFromForm)
+        activeListings = Listing.objects.filter(isActive=True, category=category)
+        allCategories = Category.objects.all()
+        return render(request, "auctions/index.html", {
+            "listing": activeListings,
+            "categories": allCategories,
+        })
+
 def login_view(request):
     if request.method == "POST":
 
